@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -8,6 +9,10 @@ import utils.WebDriverWaitUtility;
 
 public class TreePage extends BasePage {
 	
+	public TreePage(WebDriver driver) {
+		super(driver);
+	}
+
 	@FindBy(xpath="//a[text()='Terminologies']")
 	private WebElement terminologiesLink;
 	
@@ -46,6 +51,9 @@ public class TreePage extends BasePage {
 	
 	@FindBy(xpath="//a[text()='Practice Questions']")
 	private WebElement practiceQuestionsLink;	
+	
+	@FindBy(xpath="//strong//p[contains(@class,'bg-secondary')]")
+	private WebElement pageTitle;
 	
 
 	public void clickItemUnderTopicsCovered(String itemName) {
@@ -116,5 +124,10 @@ public class TreePage extends BasePage {
 	public void clickPracticeQuestionsLink() {
 		WebDriverWaitUtility.waitForElementToBeClickable(practiceQuestionsLink);
 		practiceQuestionsLink.click();
+	}
+	
+	public String getPageTitle() {
+		WebDriverWaitUtility.waitForElementToBeVisible(pageTitle);
+		return pageTitle.getText();		
 	}
 }

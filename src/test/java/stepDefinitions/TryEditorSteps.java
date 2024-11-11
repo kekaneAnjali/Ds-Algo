@@ -2,8 +2,10 @@ package stepDefinitions;
 
 import java.io.IOException;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
+import driver.TestContext;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,7 +14,16 @@ import utils.ConfigReader;
 
 public class TryEditorSteps {
 
-	TryEditorPage tryEditorPage = new TryEditorPage();
+	TestContext testContext;
+	WebDriver driver;
+
+	TryEditorPage tryEditorPage;
+	
+	public TryEditorSteps(TestContext testContext) {
+		this.testContext = testContext;
+		this.driver = testContext.getdriver();
+		this.tryEditorPage = testContext.getTryEditorPage();
+	}
 	String expectedOutput;
 
 	@Given("The user is on the Try Editor page")

@@ -1,17 +1,29 @@
 package stepDefinitions;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
+import driver.TestContext;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pages.GraphPage;
 import pages.HomePage;
 import utils.ConfigReader;
 
 public class HomeSteps {
 
-	HomePage homePage = new HomePage();
+	TestContext testContext;
+	WebDriver driver;
 
+	HomePage homePage;
+	
+	public HomeSteps(TestContext testContext) {
+		this.testContext = testContext;
+		this.driver = testContext.getdriver();
+		this.homePage = testContext.getHomePage();
+	}
+	
 	@Given("The user is on the Home page")
 	public void the_user_is_on_the_home_page() {
 		homePage.navigateToPage(ConfigReader.getHomeUrl());

@@ -2,13 +2,23 @@ package stepDefinitions;
 
 import org.openqa.selenium.WebDriver;
 
-import driver.DriverManager;
+import driver.TestContext;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import pages.RegisterPage;
 import utils.ConfigReader;
 
 public class RegistrationSteps {
-	public static WebDriver driver = DriverManager.getdriver();
+	TestContext testContext;
+	WebDriver driver;
+
+	RegisterPage registerPage;
+
+	public RegistrationSteps(TestContext testContext) {
+		this.testContext = testContext;
+		this.driver = testContext.getdriver();
+		this.registerPage = testContext.getRegisterPage();
+	}
 
 	@Given("User open browser with url https:\\/\\/dsportalapp.herokuapp.com")
 	public void user_open_browser_with_url_https_dsportalapp_herokuapp_com() {
