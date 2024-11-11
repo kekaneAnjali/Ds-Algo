@@ -2,8 +2,10 @@ package stepDefinitions;
 
 import java.io.IOException;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
+import driver.TestContext;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -13,7 +15,16 @@ import utils.LogHelper;
 
 public class ArraySteps {
 
-	ArrayPage arrayPage = new ArrayPage();
+	TestContext testContext;
+	WebDriver driver;
+
+	ArrayPage arrayPage;
+	
+	public ArraySteps(TestContext testContext) {
+		this.testContext = testContext;
+		this.driver = testContext.getdriver();
+		this.arrayPage = testContext.getArrayPage();
+	}
 	String expectedMsg = "";
 
 	// @TC_A1

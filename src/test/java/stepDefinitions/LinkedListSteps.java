@@ -1,14 +1,25 @@
 package stepDefinitions;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
+import driver.TestContext;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.LinkedListPage;
 
 public class LinkedListSteps {
-	LinkedListPage linkedlistpage = new LinkedListPage();
+	TestContext testContext;
+	WebDriver driver;
+
+	LinkedListPage linkedlistpage;
+	
+	public LinkedListSteps(TestContext testContext) {
+		this.testContext = testContext;
+		this.driver = testContext.getdriver();
+		this.linkedlistpage = testContext.getLinkedListPage();
+	}
 
 	// TC_Llist1
 

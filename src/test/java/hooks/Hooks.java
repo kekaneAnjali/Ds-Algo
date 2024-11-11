@@ -1,16 +1,13 @@
 package hooks;
 
 import java.io.ByteArrayInputStream;
-
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-
-import driver.DriverManager;
-import io.cucumber.java.AfterAll;
+import driver.TestContext;
+import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
 import io.cucumber.java.Scenario;
 import io.qameta.allure.Allure;
 import utils.ConfigReader;
@@ -18,23 +15,22 @@ import utils.LogHelper;
 import utils.WebDriverWaitUtility;
 
 public class Hooks {
-	private static WebDriver driver;
-	private static DriverManager driverManager;
-	static Scenario scenario;
+	private TestContext testContext;
 
-	@BeforeAll
-	public static void initializeDriver() throws Throwable {
-		LogHelper.info("Initializing WebDriver...");
-		driverManager = new DriverManager();
-		driver = driverManager.SetupDriver();
-		LogHelper.info("WebDriver initialized successfully.");
+	public Hooks(TestContext testContext) {
+		this.testContext = testContext;
 	}
 
 	@Before
-	public void scenario(Scenario scenario) {		
+	public void setUp(Scenario scenario) {
+		LogHelper.info("Initializing WebDriver...");
+		String browser = ConfigReader.getBrowser();
+		LogHelper.info("broswer value from Config Reader: "+browser);
+		testContext.setDriver(browser);
+		WebDriver driver = testContext.getdriver();
+		LogHelper.info("WebDriver initialized successfully for: " + scenario.getName());
 		WebDriverWaitUtility.initializeWait(driver, ConfigReader.getWebDriverWaitTimeout());
-		Hooks.scenario = scenario;
-		LogHelper.info("Starting scenario: " + scenario.getName());
+		LogHelper.info("Test started on Thread: " + Thread.currentThread().getId());
 	}
 
 	@AfterStep
@@ -42,7 +38,7 @@ public class Hooks {
 		if (scenario.isFailed()) {
 			LogHelper.error("Scenario failed: " + scenario.getName());
 			try {
-				byte[] screenshotBytes = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+				byte[] screenshotBytes = ((TakesScreenshot) testContext.getdriver()).getScreenshotAs(OutputType.BYTES);
 				scenario.attach(screenshotBytes, "image/png", "Captured Screenshot");
 				ByteArrayInputStream screenshotStream = new ByteArrayInputStream(screenshotBytes);
 				Allure.addAttachment("Failure Screenshot", screenshotStream);
@@ -53,13 +49,10 @@ public class Hooks {
 		}
 	}
 
-	@AfterAll
-	public static void tearDownDriver() {
-
+	@After
+	public void tearDown() {
 		LogHelper.info("Tearing down WebDriver...");
-		if (driverManager != null) {
-			driverManager.tearDown();
-			LogHelper.info("WebDriver torn down successfully.");
-		}
+		testContext.quitDriver();
+		LogHelper.info("Tear down WebDriver successful");
 	}
 }

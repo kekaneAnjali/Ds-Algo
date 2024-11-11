@@ -1,9 +1,14 @@
 package pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends BasePage {
+
+	public LoginPage(WebDriver driver) {
+		super(driver);
+	}
 
 	@FindBy(id = "id_username")
 	private WebElement usernameField;
@@ -20,7 +25,7 @@ public class LoginPage extends BasePage {
 		passwordField.clear();
 		passwordField.sendKeys(password);
 		loginButton.click();
-		return new HomePage();
+		return new HomePage(driver);
 	}
 
 }

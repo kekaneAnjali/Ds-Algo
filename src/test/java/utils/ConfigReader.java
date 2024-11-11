@@ -6,45 +6,54 @@ import java.util.Properties;
 
 public class ConfigReader {
 
-	private static Properties properties = new Properties();
 
-	static {
-		try (InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("config/config.properties")) {
-			if (input == null) {
-				throw new RuntimeException("config.properties file not found");
-			}
-			properties.load(input);
-		} catch (IOException ex) {
-			throw new RuntimeException("Error loading config.properties file", ex);
-		}
-	}
+    private static Properties properties = new Properties();
+//    private static ThreadLocal<String> browser = ThreadLocal.withInitial(() -> "chrome");  // Default to Chrome if not set    
+    
+    static {
+        try (InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("config/config.properties")) {
+            if (input == null) {
+                throw new RuntimeException("config.properties file not found");
+            }
+            properties.load(input);
+        } catch (IOException ex) {
+            throw new RuntimeException("Error loading config.properties file", ex);
+        }
+    }  
 
-	public static String getBrowser() {
-		return properties.getProperty("browser");
-	}
+    
+    public static void setBrowser(String browserName) {
+    	properties.setProperty("browser",browserName);
+    }
 
-	public static String getBaseUrl() {
-		return properties.getProperty("base.url");
-	}
+    public static String getBrowser() {
+        return properties.getProperty("browser");
+    }
+    
+    public static String getBaseUrl() {
+    	return properties.getProperty("base.url");
+    }
+    
+    public static String getPageLoadTimeout() {
+    	return properties.getProperty("page.load.timeout");
+    }
+    
+    public static long getWebDriverWaitTimeout() {
+    	return Long.parseLong(properties.getProperty("webdriver.wait.timeout"));
+    }
+    
+    // Login Page URLs
+    public static String getLoginUrl() {
+    	return properties.getProperty("login.url");
+    }
+    
+    // Login Page URLs
+    public static String getHomeUrl() {
+    	return properties.getProperty("home.url");
+    }
+    
 
-	public static String getPageLoadTimeout() {
-		return properties.getProperty("page.load.timeout");
-	}
-
-	public static long getWebDriverWaitTimeout() {
-		return Long.parseLong(properties.getProperty("webdriver.wait.timeout"));
-	}
-
-	// Login Page URLs
-	public static String getLoginUrl() {
-		return properties.getProperty("login.url");
-	}
-
-	// Login Page URLs
-	public static String getHomeUrl() {
-		return properties.getProperty("home.url");
-	}
-
+	
 //  Anjali- Register page URLs
 	public static String getRegisterUrl() {
 		return properties.getProperty("register.url");
