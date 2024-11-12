@@ -13,13 +13,14 @@ import utils.ConfigReader;
 
 public class DriverManager {
 
-	public static WebDriver driver;
+	private static ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
 
 	public WebDriver SetupDriver() {
 
 		String browser = ConfigReader.getBrowser();
 		long pageLoadTimeout = Long.parseLong(ConfigReader.getPageLoadTimeout()); 
-
+		WebDriver driver;
+		
 		switch (browser.toLowerCase()) {
 		case "chrome":
 			WebDriverManager.chromedriver().setup();
@@ -44,19 +45,18 @@ public class DriverManager {
 		default:
 			throw new RuntimeException("Browser not supported: " + browser);
 		}
-
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTimeout));
-		driver.manage().window().maximize();
+		threadLocalDriver.set(driver);
+		getdriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTimeout));
+		getdriver().manage().window().maximize();
 		return driver;
 	}
 
 	public static WebDriver getdriver() {
-		return driver;
-
+		return threadLocalDriver.get();
 	}
 
 	public void tearDown() {
-		driver.close();
+		getdriver().close();
 	}
 
 }

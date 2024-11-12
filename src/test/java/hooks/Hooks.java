@@ -7,6 +7,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import driver.DriverManager;
+import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
@@ -18,25 +19,22 @@ import utils.LogHelper;
 import utils.WebDriverWaitUtility;
 
 public class Hooks {
-	private static WebDriver driver;
-	private static DriverManager driverManager;
+	private  WebDriver driver;
+	DriverManager driverManager = new DriverManager();;
 	static Scenario scenario;
 
-	@BeforeAll
-	public static void initializeDriver() throws Throwable {
+	@Before
+	public void initializeDriver(Scenario scenario) throws Throwable {
 		LogHelper.info("Initializing WebDriver...");
-		driverManager = new DriverManager();
 		driver = driverManager.SetupDriver();
 		LogHelper.info("WebDriver initialized successfully.");
-	}
-
-	@Before
-	public void scenario(Scenario scenario) {		
+		
 		WebDriverWaitUtility.initializeWait(driver, ConfigReader.getWebDriverWaitTimeout());
 		Hooks.scenario = scenario;
 		LogHelper.info("Starting scenario: " + scenario.getName());
 	}
 
+	
 	@AfterStep
 	public void captureFailureDetails(Scenario scenario) {
 		if (scenario.isFailed()) {
@@ -53,8 +51,8 @@ public class Hooks {
 		}
 	}
 
-	@AfterAll
-	public static void tearDownDriver() {
+	@After
+	public void tearDownDriver() {
 
 		LogHelper.info("Tearing down WebDriver...");
 		if (driverManager != null) {

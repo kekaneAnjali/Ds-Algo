@@ -22,6 +22,10 @@ public class ConfigReader {
 	public static String getBrowser() {
 		return properties.getProperty("browser");
 	}
+	
+	public static void setBrowser(String browserName) {
+		properties.setProperty("browser", browserName);
+	}
 
 	public static String getBaseUrl() {
 		return properties.getProperty("base.url");

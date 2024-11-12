@@ -7,9 +7,10 @@ import driver.DriverManager;
 
 public class BasePage {
 	
-	public static WebDriver driver = DriverManager.getdriver();
+	public WebDriver driver;
 	
 	public BasePage() {
+		this.driver = DriverManager.getdriver();
 		PageFactory.initElements(driver, this);
 	}
 	
