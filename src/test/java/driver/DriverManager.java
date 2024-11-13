@@ -42,7 +42,9 @@ public class DriverManager {
 		case "edge":
 			WebDriverManager.edgedriver().setup();
 			EdgeOptions edgeOptions = new EdgeOptions();
-			edgeOptions.addArguments("--headless");			
+			edgeOptions.addArguments("--headless");	
+			edgeOptions.addArguments("no-sandbox");
+			edgeOptions.addArguments("disable-dev-shm-usage");
 			driver = new EdgeDriver(edgeOptions);
 			break;
 
